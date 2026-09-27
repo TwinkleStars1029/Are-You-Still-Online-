@@ -1,5 +1,11 @@
 import { computed, ref } from 'vue'
+import lyricsData from '../data/lyrics.json'
 
+export const LYRICS = lyricsData.lines
+export const SECTIONS = lyricsData.sections
+
+// Prototype v0.1 visuals are still implemented for the opening 30 seconds.
+// The lyric timeline already covers the full song and can drive future scenes.
 export const SCENES = [
   { id: 'boot', start: 0, end: 11 },
   { id: 'chat', start: 11, end: 26 },
@@ -31,6 +37,39 @@ export function useMVDirector() {
     )
   })
 
+  const activeLyric = computed(() => {
+    return (
+      LYRICS.find((line) => {
+        const end = line.end ?? Number.POSITIVE_INFINITY
+        return currentTime.value >= line.start && currentTime.value < end
+      }) ?? null
+    )
+  })
+
+  const lyricProgress = computed(() => {
+    const line = activeLyric.value
+    if (!line) return 0
+
+    const end = line.end ?? duration.value
+    const length = Math.max(end - line.start, 0.001)
+
+    return Math.min(
+      1,
+      Math.max(0, (currentTime.value - line.start) / length),
+    )
+  })
+
+  const activeSection = computed(() => {
+    return (
+      SECTIONS.find((section) => {
+        const end = section.end ?? Number.POSITIVE_INFINITY
+        return currentTime.value >= section.start && currentTime.value < end
+      }) ?? null
+    )
+  })
+
+  const currentCue = computed(() => activeLyric.value?.cue ?? null)
+
   const totalProgress = computed(() => {
     return Math.min(1, Math.max(0, currentTime.value / duration.value))
   })
@@ -44,6 +83,10 @@ export function useMVDirector() {
     duration,
     activeScene,
     sceneProgress,
+    activeLyric,
+    lyricProgress,
+    activeSection,
+    currentCue,
     totalProgress,
     seek,
   }
