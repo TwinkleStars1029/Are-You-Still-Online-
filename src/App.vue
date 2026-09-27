@@ -107,7 +107,7 @@ function seekTo(value) {
 
 function onAudioLoaded() {
   audioReady.value = true
-  director.duration.value = Math.min(audio.value.duration || 30, 30)
+  director.duration.value = audio.value.duration || 30
   statusText.value = '已載入 song.mp3'
 }
 
