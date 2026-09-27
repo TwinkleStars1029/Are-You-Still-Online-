@@ -4,6 +4,12 @@ import BootScene from './components/BootScene.vue'
 import VerseOneScene from './components/VerseOneScene.vue'
 import PreChorusScene from './components/PreChorusScene.vue'
 import QuestionScene from './components/QuestionScene.vue'
+import MemoryScene from './components/MemoryScene.vue'
+import NetworkScene from './components/NetworkScene.vue'
+import SignalSearchScene from './components/SignalSearchScene.vue'
+import VoidScene from './components/VoidScene.vue'
+import FinalChorusScene from './components/FinalChorusScene.vue'
+import OutroScene from './components/OutroScene.vue'
 import { DEMO_END, useMVDirector } from './composables/useMVDirector'
 
 const director = useMVDirector()
@@ -27,6 +33,18 @@ const sceneComponent = computed(() => {
       return PreChorusScene
     case 'question':
       return QuestionScene
+    case 'memory':
+      return MemoryScene
+    case 'network':
+      return NetworkScene
+    case 'signal-search':
+      return SignalSearchScene
+    case 'void':
+      return VoidScene
+    case 'final-chorus':
+      return FinalChorusScene
+    case 'outro':
+      return OutroScene
     default:
       return BootScene
   }
@@ -82,7 +100,7 @@ async function togglePlay() {
     }
   } else {
     isDemoMode.value = true
-    statusText.value = 'v0.2 展示模式'
+    statusText.value = 'v0.3 全曲展示模式'
   }
 
   if (isDemoMode.value) {
@@ -99,7 +117,7 @@ function seekTo(value) {
   director.seek(time)
 
   if (audio.value && audioReady.value) {
-    audio.value.currentTime = time
+    audio.value.currentTime = Math.min(time, audio.value.duration || time)
   }
 
   if (isPlaying.value && isDemoMode.value) {
@@ -110,14 +128,14 @@ function seekTo(value) {
 
 function onAudioLoaded() {
   audioReady.value = true
-  director.duration.value = audio.value.duration || DEMO_END
+  director.duration.value = Math.max(audio.value.duration || 0, 242.61)
   statusText.value = '已載入 song.mp3'
 }
 
 function onAudioError() {
   audioReady.value = false
   director.duration.value = DEMO_END
-  statusText.value = 'v0.2 展示模式'
+  statusText.value = 'v0.3 全曲展示模式'
 }
 
 onBeforeUnmount(() => cancelAnimationFrame(rafId))
@@ -148,6 +166,10 @@ onBeforeUnmount(() => cancelAnimationFrame(rafId))
 
     <div class="noise" />
     <div class="scanlines" />
+
+    <div class="section-readout">
+      {{ director.activeSection.value?.id ?? 'intro' }}
+    </div>
 
     <div class="player">
       <button class="play" @click="togglePlay">

@@ -4,13 +4,19 @@ import lyricsData from '../data/lyrics.json'
 export const LYRICS = lyricsData.lines
 export const SECTIONS = lyricsData.sections
 
-export const DEMO_END = 49.34
+export const DEMO_END = 250
 
 export const SCENES = [
   { id: 'boot', start: 0, end: 12.73 },
   { id: 'verse-1', start: 12.73, end: 32.08 },
   { id: 'pre-chorus-1', start: 32.08, end: 44.89 },
-  { id: 'question', start: 44.89, end: DEMO_END },
+  { id: 'question', start: 44.89, end: 49.34 },
+  { id: 'memory', start: 49.34, end: 82.39 },
+  { id: 'network', start: 82.39, end: 115.53 },
+  { id: 'signal-search', start: 115.53, end: 154.68 },
+  { id: 'void', start: 154.68, end: 184.62 },
+  { id: 'final-chorus', start: 184.62, end: 216.43 },
+  { id: 'outro', start: 216.43, end: DEMO_END },
 ]
 
 export function useMVDirector() {
