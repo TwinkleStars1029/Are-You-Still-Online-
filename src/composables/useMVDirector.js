@@ -4,7 +4,7 @@ import lyricsData from '../data/lyrics.json'
 export const LYRICS = lyricsData.lines
 export const SECTIONS = lyricsData.sections
 
-export const DEMO_END = 250
+export const DEMO_END = 253
 
 export const SCENES = [
   { id: 'boot', start: 0, end: 12.73 },
