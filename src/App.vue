@@ -1,9 +1,10 @@
 <script setup>
 import { computed, onBeforeUnmount, ref } from 'vue'
 import BootScene from './components/BootScene.vue'
-import ChatScene from './components/ChatScene.vue'
+import VerseOneScene from './components/VerseOneScene.vue'
+import PreChorusScene from './components/PreChorusScene.vue'
 import QuestionScene from './components/QuestionScene.vue'
-import { useMVDirector } from './composables/useMVDirector'
+import { DEMO_END, useMVDirector } from './composables/useMVDirector'
 
 const director = useMVDirector()
 
@@ -20,8 +21,10 @@ let demoBaseTime = 0
 
 const sceneComponent = computed(() => {
   switch (director.activeScene.value?.id) {
-    case 'chat':
-      return ChatScene
+    case 'verse-1':
+      return VerseOneScene
+    case 'pre-chorus-1':
+      return PreChorusScene
     case 'question':
       return QuestionScene
     default:
@@ -79,7 +82,7 @@ async function togglePlay() {
     }
   } else {
     isDemoMode.value = true
-    statusText.value = '展示模式'
+    statusText.value = 'v0.2 展示模式'
   }
 
   if (isDemoMode.value) {
@@ -107,14 +110,14 @@ function seekTo(value) {
 
 function onAudioLoaded() {
   audioReady.value = true
-  director.duration.value = audio.value.duration || 30
+  director.duration.value = audio.value.duration || DEMO_END
   statusText.value = '已載入 song.mp3'
 }
 
 function onAudioError() {
   audioReady.value = false
-  director.duration.value = 30
-  statusText.value = '找不到 song.mp3，已啟用展示模式'
+  director.duration.value = DEMO_END
+  statusText.value = 'v0.2 展示模式'
 }
 
 onBeforeUnmount(() => cancelAnimationFrame(rafId))
@@ -136,6 +139,10 @@ onBeforeUnmount(() => cancelAnimationFrame(rafId))
         :is="sceneComponent"
         :key="director.activeScene.value?.id"
         :progress="director.sceneProgress.value"
+        :current-time="director.currentTime.value"
+        :lyric="director.activeLyric.value"
+        :lyric-progress="director.lyricProgress.value"
+        :cue="director.currentCue.value"
       />
     </Transition>
 

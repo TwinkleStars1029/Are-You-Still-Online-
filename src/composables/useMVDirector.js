@@ -4,17 +4,18 @@ import lyricsData from '../data/lyrics.json'
 export const LYRICS = lyricsData.lines
 export const SECTIONS = lyricsData.sections
 
-// Prototype v0.1 visuals are still implemented for the opening 30 seconds.
-// The lyric timeline already covers the full song and can drive future scenes.
+export const DEMO_END = 49.34
+
 export const SCENES = [
-  { id: 'boot', start: 0, end: 11 },
-  { id: 'chat', start: 11, end: 26 },
-  { id: 'question', start: 26, end: 30 },
+  { id: 'boot', start: 0, end: 12.73 },
+  { id: 'verse-1', start: 12.73, end: 32.08 },
+  { id: 'pre-chorus-1', start: 32.08, end: 44.89 },
+  { id: 'question', start: 44.89, end: DEMO_END },
 ]
 
 export function useMVDirector() {
   const currentTime = ref(0)
-  const duration = ref(30)
+  const duration = ref(DEMO_END)
 
   const activeScene = computed(() => {
     return (
